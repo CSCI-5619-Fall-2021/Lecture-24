@@ -18,11 +18,9 @@ module.exports = merge(common, {
         open: true,
         disableHostCheck: true,
 
-        // enable to access from other devices on the network
+        // enable all of these options if you are not using ngrok
         //useLocalIp: true,
         //host: '0.0.0.0', 
-
-        // if you aren’t using ngrok, and want to connect locally, webxr requires https
-        // https: true,
+        //https: true,
     }    
 });

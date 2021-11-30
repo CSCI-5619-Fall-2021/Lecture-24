@@ -12,13 +12,7 @@ import { HemisphericLight } from "@babylonjs/core/Lights/hemisphericLight";
 import { Logger } from "@babylonjs/core/Misc/logger";
 import { MeshBuilder } from "@babylonjs/core/Meshes/meshBuilder"
 
-import { WebXRCamera } from "@babylonjs/core/XR/webXRCamera";
-import { PointerEventTypes, PointerInfo } from "@babylonjs/core/Events/pointerEvents";
-import { WebXRManagedOutputCanvasOptions } from "@babylonjs/core/XR";
-import { HighlightLayer, Mesh } from "@babylonjs/core";
-
 // Side effects
-import "@babylonjs/core/Helpers/sceneHelpers";
 import "@babylonjs/core/Materials/standardMaterial"
 import "@babylonjs/inspector";
 
@@ -27,9 +21,6 @@ class Game
     private canvas: HTMLCanvasElement;
     private engine: Engine;
     private scene: Scene;
-
-    private xrCamera: WebXRCamera | null; 
-    private highlightLayer: HighlightLayer | null;
 
     constructor()
     {
@@ -42,11 +33,6 @@ class Game
         // Creates a basic Babylon Scene object
         this.scene = new Scene(this.engine);   
 
-        // Initialize the XR camera to null
-        this.xrCamera = null;
-
-        // Initialize the highlight layer to null
-        this.highlightLayer = null;
     }
 
     start() : void 
@@ -78,19 +64,6 @@ class Game
         // This attaches the camera to the canvas
         camera.attachControl(this.canvas, true);
 
-        // Creates the XR experience helper
-        const xrHelper = await this.scene.createDefaultXRExperienceAsync({});
-
-        // Assigns the web XR camera to a member variable
-        this.xrCamera = xrHelper.baseExperience.camera;
-
-        // Enable highlight layer
-        var canvasOptions = WebXRManagedOutputCanvasOptions.GetDefaults();
-        canvasOptions.canvasOptions!.stencil = true;
-
-        // Create a highlight layer
-        this.highlightLayer = new HighlightLayer("highlightLayer", this.scene);
-
         // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
         var light = new HemisphericLight("light", new Vector3(0, 1, 0), this.scene);
 
@@ -106,14 +79,6 @@ class Game
         // Our built-in 'ground' shape.
         var ground = MeshBuilder.CreateGround("ground", {width: 100, height: 100}, this.scene);
 
-        // Add the ground as a mesh for teleportation
-        xrHelper.teleportation.addFloorMesh(ground);
-
-        // Register event handler for selection events (pulling the trigger, clicking the mouse button)
-        this.scene.onPointerObservable.add((pointerInfo) => {
-            this.processPointer(pointerInfo);
-        });
-
         // Show the debug scene explorer and object inspector
         // You should comment this out when you build your final program 
         //this.scene.debugLayer.show(); 
@@ -123,31 +88,6 @@ class Game
     private update() : void
     {
  
-    }
-
-    // Event handler for processing pointer events
-    private processPointer(pointerInfo: PointerInfo)
-    {
-        switch (pointerInfo.type) {
-            case PointerEventTypes.POINTERDOWN:
-                if (pointerInfo.pickInfo?.hit) {
-
-                    // Write the current info to the log
-                    Logger.Log(pointerInfo.pickInfo.pickedMesh?.name + " " + pointerInfo.pickInfo.pickedPoint);
-                    
-                    // Toggle the mesh in the highlight layer
-                    if(this.highlightLayer?.hasMesh(pointerInfo.pickInfo.pickedMesh! as Mesh))
-                    {
-                        this.highlightLayer?.removeMesh(pointerInfo.pickInfo.pickedMesh! as Mesh);
-                    }
-                    else
-                    { 
-                        this.highlightLayer?.removeAllMeshes();
-                        this.highlightLayer?.addMesh(pointerInfo.pickInfo.pickedMesh! as Mesh, Color3.Green());
-                    }
-                }
-                break;
-        }
     }
 
 }
