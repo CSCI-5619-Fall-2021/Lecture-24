@@ -1,7 +1,7 @@
 {
-    "name": "Web-Based-VR-Tutorial",
+    "name": "Lecture-24",
     "version": "1.0.0",
-    "description": "IEEE VR 2021 Web-Based VR Tutorial",
+    "description": "Lecture 24, CS 5619, Fall 2020",
     "main": "index.ts",
     "dependencies": {
         "@babylonjs/core": "^4.2",
