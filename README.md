@@ -22,7 +22,7 @@ npm run start
 
 For those familiar with Typescript, you do not have to run ```tsc``` to build the .js files from the .ts files;  ```npx``` builds them on the fly as part of running webpack.
 
-You can run the sample by pointing your web browser at ```https://localhost:8080```
+You can run the sample by pointing your web browser at ```http://localhost:8080```
 
 ## Acknowledgments
 
